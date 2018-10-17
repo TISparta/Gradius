@@ -6,18 +6,15 @@
 
 class Enemy {
 public:
-  Enemy ();
-  virtual ~Enemy ();
+  Enemy () {};
+  virtual ~Enemy () {};
   virtual void render (sf::RenderWindow& window) = 0;
-private:
-  float vel;
+  virtual void update (const sf::Vector2f player_pos) = 0;
   void hundleCollision (); // Aun no estoy seguro de los parametros
-  void update ();
   float movementSpeed;
-  int direction;
-  int attack;
-  float attackSpeed;
-  int kindOfBullet;
+  int directionX;
+  int directionY;
+  int attackSpeed;
   int lives;
   int score;
 };

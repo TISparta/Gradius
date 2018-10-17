@@ -2,10 +2,13 @@
 #define GAME_HPP
 
 #include <SFML/Graphics.hpp>
-#include <vector>
+#include "config.hpp"
 #include "Player.hpp"
 #include "Terrain.hpp"
 #include "Enemy.hpp"
+#include "Enemy01.hpp"
+#include "Bullet.hpp"
+#include <vector>
 
 class Game {
 public:
@@ -23,12 +26,14 @@ private:
   void generateEnemy ();
   void update ();
   void render ();
+  bool playing = true;
+  bool pause = false;
+  int cntEnemy01 = 0;
   sf::RenderWindow window;
-  bool playing;
-  bool pause;
   Player player1;
-  Terrain* terrain;
+  Terrain terrain;
   std::vector <Enemy*> enemy;
+  std::vector <Bullet*> bullet;
 };
 
 #endif

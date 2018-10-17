@@ -11,13 +11,15 @@ public:
   Player ();
   ~Player ();
   void render (sf::RenderWindow& window);
-  void setDirection (int dir);
+  void setDirection (int dirX,int dirY);
+  const sf::Vector2f& getPosition () { return player.getPosition(); }
 private:
   sf::CircleShape player;
-  void hundleCollision (); // Aun no estoy seguro de los parametros
+  bool hundleCollision (); // Aun no estoy seguro de los parametros
   void update ();
   float movementSpeed;
-  int direction;
+  int dirX;
+  int dirY; // no es dir ?
   int attack;
   float attackSpeed;
   int kindOfBullet;

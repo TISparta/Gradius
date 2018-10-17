@@ -1,7 +1,8 @@
 #include "Game.hpp"
+#include <iostream>
 
 Game::Game ():
-  window(sf::VideoMode(600, 600), "Gradius - NES"),
+  window(sf::VideoMode(1200, 600), "Gradius - NES"),
   player1() {
 
 }
@@ -58,12 +59,16 @@ void Game::processPlayingEvents () {
   processEvents();
 }
 
-void Game::update () {
+bool ok = true;
 
+void Game::update () {
+  if (ok) enemy.emplace_back(new Enemy01()); 
+  ok = false;
 }
 
 void Game::render () {
   window.clear();
   player1.render(window);
+  for (auto enemy_i: enemy) enemy_i -> render(window);
   window.display();
 }

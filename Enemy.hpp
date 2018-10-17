@@ -6,17 +6,21 @@
 
 class Enemy {
 public:
-  Enemy ();
-  virtual ~Enemy ();
+  Enemy () {};
+  virtual ~Enemy () {};
   virtual void render (sf::RenderWindow& window) = 0;
+  void setMovementSpeed (int _speed) { movementSpeed = _speed; }
+  void setDirection (int dir) { direction = dir; }
+  void setAttackSpeed (int _attackSpeed) { attackSpeed = _attackSpeed; }
+  void setKindOfBuller (int _kindOfBuller) { kindOfBullet = _kindOfBuller; }
+  void setLives (int _lives) { lives = _lives; }
+  void setScore (int _score) { score = _score; }
 private:
-  float vel;
   void hundleCollision (); // Aun no estoy seguro de los parametros
   void update ();
-  float movementSpeed;
+  int movementSpeed;
   int direction;
-  int attack;
-  float attackSpeed;
+  int attackSpeed;
   int kindOfBullet;
   int lives;
   int score;

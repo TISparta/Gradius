@@ -6,6 +6,7 @@
 #include "Player.hpp"
 #include "Terrain.hpp"
 #include "Enemy.hpp"
+#include "Enemy01.hpp"
 
 class Game {
 public:

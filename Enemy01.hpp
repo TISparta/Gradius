@@ -6,9 +6,10 @@
 class Enemy01: public Enemy {
 public:
   Enemy01 ();
-  ~Enemy01 ();
+  virtual ~Enemy01 () {};
+  virtual void render (sf::RenderWindow& window) override;
 private:
-  // Algo especial para el primer enemigo
+  sf::CircleShape enemy;
 };
 
 #endif

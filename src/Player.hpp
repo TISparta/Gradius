@@ -12,6 +12,7 @@ public:
   ~Player ();
   void render (sf::RenderWindow& window);
   void setDirection (int dir);
+  const sf::Vector2f& getPosition () { return player.getPosition(); }
 private:
   sf::CircleShape player;
   void hundleCollision (); // Aun no estoy seguro de los parametros

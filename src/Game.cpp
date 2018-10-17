@@ -2,13 +2,14 @@
 #include <iostream>
 
 Game::Game ():
-  window(sf::VideoMode(1200, 600), "Gradius - NES"),
-  player1() {
-
+  window(sf::VideoMode(WIDTH, HEIGHT), "Gradius - NES"),
+  player1(),
+  terrain() {
 }
 
 Game::~Game () {
-
+  for (auto enemy_i: enemy) delete enemy_i;
+  for (auto bullet_i: bullet) delete bullet_i;
 }
 
 void Game::run () {
@@ -35,7 +36,6 @@ void Game::run () {
 }
 
 void Game::showSetup () {
-
 }
 
 void Game::showResult () {
@@ -62,13 +62,25 @@ void Game::processPlayingEvents () {
 bool ok = true;
 
 void Game::update () {
-  if (ok) enemy.emplace_back(new Enemy01()); 
-  ok = false;
+  if (ok) {
+    bullet.emplace_back(new Bullet(sf::Vector2f(WIDTH / 2.0f, HEIGHT / 2.0f), RIGHT));
+    ok = false;
+  }
+  if (cntEnemy01 <= 0) {
+    enemy.emplace_back(new Enemy01());
+    cntEnemy01 = E01::cnt;
+  }
+  terrain.update();
+  for (auto enemy_i: enemy) enemy_i -> update(player1.getPosition());
+  for (auto bullet_i: bullet) bullet_i -> update();
+  cntEnemy01 -= 1;
 }
 
 void Game::render () {
   window.clear();
+  terrain.render(window);
   player1.render(window);
   for (auto enemy_i: enemy) enemy_i -> render(window);
+  for (auto bullet_i: bullet) bullet_i -> render(window);
   window.display();
 }

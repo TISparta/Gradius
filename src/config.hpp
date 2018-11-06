@@ -7,6 +7,8 @@
 #define all(X) begin(X), end(X)
 
 // Directions
+static int UNCHANGED = -2;
+static int NOMOVE = -1;
 static int UP = 0;
 static int LEFT = 1;
 static int DOWN = 2;
@@ -22,6 +24,12 @@ static int FRAMES = 60;
 // up, left, down, right vector directions
 static std::vector <int> dx = {0, -1, 0, 1};
 static std::vector <int> dy = {-1, 0, 1, 0};
+
+// Player
+namespace PLAYER {
+  static float movementSpeedX = WIDTH * 0.015F / FRAMES;
+  static float movementSpeedY = WIDTH * 0.015F / FRAMES;
+}
 
 // Enemy 01
 namespace E01 {
@@ -53,6 +61,7 @@ namespace Start {
   static float yVel = HEIGHT * 0.0001f / FRAMES;
 }
 
+// Bullet
 namespace BulletConf {
   static sf::Vector2f dimensions(30.f, 10.f);
   static sf::Color color = sf::Color::Yellow;

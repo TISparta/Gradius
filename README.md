@@ -2,6 +2,9 @@
 
 #### Proyecto de POOII
 
+**Prerequisitos**
+- [SFML](https://www.sfml-dev.org/)
+
 **¿Cómo ejecutar el programa?**
 - Clona el repositorio
 - Abre una terminal y ubicate donde lo clonaste

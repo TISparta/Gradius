@@ -28,5 +28,7 @@ void Terrain::update () {
 }
 
 void Terrain::render (sf::RenderWindow& window) {
-  for (auto start: starts) window.draw(start);
+  for_each(all(starts), [&window] (auto start) {
+    window.draw(start);
+  });
 }

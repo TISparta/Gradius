@@ -10,6 +10,7 @@ public:
   ~Bullet() {};
   void render (sf::RenderWindow& window);
   void update ();
+  inline sf::RectangleShape getBullet () { return bullet; }
 private:
   int dir;
   sf::RectangleShape bullet;

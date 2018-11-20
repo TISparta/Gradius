@@ -1,20 +1,18 @@
 #include "Game.hpp"
+#include "util.hpp"
 #include <iostream>
 #include <chrono>
 #include <thread>
 
 Game::Game ():
-  window(sf::VideoMode(WIDTH, HEIGHT), "Gradius - NES"),
-  player1(),
+  window(sf::VideoMode(WIDTH, HEIGHT), GAME_NAME),
+  player(),
   terrain() {
-  if (not font.loadFromFile("./fonts/arial.ttf")) {
-    std::cerr << "Could not load arial.ttf" << std::endl;
-  }
+  loadFont(font, FONT); 
 }
 
 Game::~Game () {
   for (auto enemy_i: enemy) delete enemy_i;
-  for (auto bullet_i: bullet) delete bullet_i;
 }
 
 void Game::run () {
@@ -29,19 +27,20 @@ void Game::run () {
     while (window.isOpen()) {
       gotEvents = window.pollEvent(event);
       processPlayingEvents();
-      processEvents();
-      update();
-      render();
-      bool gotPaused = false;
+      processWindowEvents();
+      bool gotPaused = pause;
       while (window.isOpen() and pause) {
-        if (not gotPaused) showPausedMessage();
+        if (gotPaused) showPausedMessage();
         gotEvents = window.pollEvent(event);
-        processEvents();
-        gotPaused = true;
+        processWindowEvents();
       }
       if (gotPaused) showCounter();
+      update();
+      render();
+      if (state != State::PLAYING) break;
     }
-    /* Mostrar su score y preguntar si quiere jugar d nuev
+    window.close();
+    /* Mostrar su score y preguntar si quiere jugar de nuev
     while (window.isOpen()) {
       showResult();
       processResultEvents();
@@ -51,96 +50,57 @@ void Game::run () {
 }
 
 void Game::showCounter () {
-  for (std::string msg: {"1", "2", "3", "GO"}) {
+  for (std::string msg: COUNTER::MSG) {
     render();
     sf::Text text;
-    text.setFont(font);
-    text.setString(msg);
-    text.setCharacterSize(50);
-    text.setFillColor(sf::Color::Blue);
-    text.setStyle(sf::Text::Bold);
+    setText(text, msg, COUNTER::TEXT_SIZE, font);
     window.draw(text);
     window.display();
-    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+    std::this_thread::sleep_for(std::chrono::milliseconds(COUNTER::LAPSE));
+  }
+}
+
+void Game::processPlayingEvents () {
+  if (not gotEvents) return;
+  if (event.type == sf::Event::KeyPressed) {
+    int key = event.key.code;
+    if (find(all(KEY::UP), key) != end(KEY::UP)) {
+      player.setDirection(DIR::UNCHANGED, DIR::UP);
+    }
+    if (find(all(KEY::DOWN), key) != end(KEY::DOWN)) {
+      player.setDirection(DIR::UNCHANGED, DIR::DOWN);
+    }
+    if (find(all(KEY::LEFT), key) != end(KEY::LEFT)) {
+      player.setDirection(DIR::LEFT, DIR::NOMOVE);
+    }
+    if (find(all(KEY::RIGHT), key) != end(KEY::RIGHT)) {
+      player.setDirection(DIR::RIGHT, DIR::NOMOVE);
+    }
+    if (find(all(KEY::ATTACK), key) != end(KEY::ATTACK)) {
+      player.shoot();
+    }
+  }
+}
+
+void Game::processWindowEvents () {
+  if (not gotEvents) return;
+  if (event.type == sf::Event::Closed) {
+    window.close();
+  }
+  if (event.type == sf::Event::KeyPressed) {
+    int key = event.key.code;
+    if (key == KEY::EXIT) window.close();
+    if (key == KEY::PAUSE) pause = 1 - pause;
   }
 }
 
 void Game::showPausedMessage () {
   sf::Text text;
-  text.setFont(font);
-  text.setString("Pausa");
-  text.setCharacterSize(50);
-  text.setFillColor(sf::Color::Blue);
-  text.setStyle(sf::Text::Bold);
+  setText(text, PAUSE::MSG, PAUSE::TEXT_SIZE, font);
+  terrain.update();
+  render(true);
   window.draw(text);
   window.display();
-}
-
-void Game::showSetup () {
-}
-
-void Game::showResult () {
-
-}
-
-void Game::processEvents () {
-  if (gotEvents) {
-    if (event.type == sf::Event::Closed) {
-      window.close();
-    }
-    if (event.type == sf::Event::KeyPressed and
-        event.key.code == sf::Keyboard::Escape) {
-      window.close();
-    }
-    if (event.type == sf::Event::KeyPressed and
-        event.key.code == sf::Keyboard::P) {
-      pause = 1 - pause;
-    }
-  }
-}
-
-void Game::processSetupEvents () {
-}
-
-void Game::processPlayingEvents () {
-  if (gotEvents) {
-    if (event.type == sf::Event::KeyPressed and
-        (event.key.code == sf::Keyboard::Up or
-         event.key.code == sf::Keyboard::W)) {
-      player1.setDirection(UNCHANGED, UP);
-    }
-    if (event.type == sf::Event::KeyPressed and
-        (event.key.code == sf::Keyboard::Down or
-         event.key.code == sf::Keyboard::S)) {
-      player1.setDirection(UNCHANGED, DOWN);
-    }
-    if (event.type == sf::Event::KeyPressed and
-        (event.key.code == sf::Keyboard::Left or
-         event.key.code == sf::Keyboard::A)) {
-      player1.setDirection(LEFT, NOMOVE);
-    }
-    if (event.type == sf::Event::KeyPressed and
-        (event.key.code == sf::Keyboard::Right or
-         event.key.code == sf::Keyboard::D)) {
-      player1.setDirection(RIGHT, NOMOVE);
-    }
-    if (event.type == sf::Event::KeyPressed and
-        event.key.code == sf::Keyboard::Space) {
-      bullet.emplace_back(new Bullet(player1.getPosition(), RIGHT));
-    }
-  }
-}
-
-void Game::hundleCollisionBulletEnemy () {
-  for (Bullet* b: bullet) {
-    for (Enemy* e: enemy) {
-      // Aqui hacer los chequeos
-    }
-  }
-}
-
-void Game::hundleCollisions () {
-  hundleCollisionBulletEnemy();
 }
 
 void Game::update () {
@@ -148,19 +108,52 @@ void Game::update () {
     enemy.emplace_back(new Enemy01());
     cntEnemy01 = E01::cnt;
   }
-  player1.update();
   terrain.update();
-  for (auto enemy_i: enemy) enemy_i -> update(player1.getPosition());
-  for (auto bullet_i: bullet) bullet_i -> update();
+  for (auto enemy_i: enemy) enemy_i -> update(player.getPosition());
+  player.update();
   cntEnemy01 -= 1;
   hundleCollisions();
 }
 
-void Game::render () {
+
+void Game::hundleCollisions () {
+  hundleCollisionWithEnemy();
+  hundleCollisionWithBullets();
+}
+
+void Game::hundleCollisionWithEnemy () {
+  auto p = player.getPlayer();
+  bool collision = false;
+  for_each(all(enemy), [&] (auto enemy_i) {
+    auto _enemy = enemy_i -> getEnemies();
+    for_each(all(_enemy), [&] (auto e) {
+      collision |= p.getGlobalBounds().intersects(e.getGlobalBounds());
+    });
+  });
+  if (collision) state = State::LOSE;
+}
+
+void Game::hundleCollisionWithBullets () {
+  auto bullets = player.getBullets(); 
+  for_each(all(enemy), [&] (auto enemy_i) {
+    auto _enemy = enemy_i -> getEnemies();
+    for (int i = 0; i < int(_enemy.size()); i++) {
+      for (int j = 0; j < int(bullets.size()); j++) {
+        auto s1 = _enemy[i].getGlobalBounds();
+        auto s2 = bullets[j] -> getBullet().getGlobalBounds();
+        if (s1.intersects(s2)) {
+          enemy_i -> setToDelete(i);
+          player.setToDeleteBullet(j);
+        }
+      }
+    } 
+  });
+}
+
+void Game::render (bool pause) {
   window.clear();
   terrain.render(window);
-  player1.render(window);
   for (auto enemy_i: enemy) enemy_i -> render(window);
-  for (auto bullet_i: bullet) bullet_i -> render(window);
-  window.display();
+  player.render(window);
+  if (not pause) window.display();
 }

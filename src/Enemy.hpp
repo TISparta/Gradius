@@ -10,13 +10,10 @@ public:
   virtual ~Enemy () {};
   virtual void render (sf::RenderWindow& window) = 0;
   virtual void update (const sf::Vector2f player_pos) = 0;
-  void hundleCollision (); // Aun no estoy seguro de los parametros
-  float movementSpeed;
-  int directionX;
-  int directionY;
-  int attackSpeed;
-  int lives;
-  int score;
+  virtual void setToDelete (int id) = 0;
+  virtual std::vector <sf::CircleShape>& getEnemies () = 0;
+  int directionX, directionY;
+  std::vector <bool> toDelete;
 };
 
 #endif

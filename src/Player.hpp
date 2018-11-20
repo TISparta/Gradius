@@ -3,8 +3,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <vector>
-#include "Enemy.hpp"
-#include "Terrain.hpp"
+#include "Bullet.hpp"
 
 class Player {
 public:
@@ -13,18 +12,16 @@ public:
   void render (sf::RenderWindow& window);
   void update ();
   void setDirection (int _dirX, int _dirY);
-  const sf::Vector2f& getPosition () { return player.getPosition(); }
+  void setToDeleteBullet (int id);
+  void shoot ();
+  inline const sf::Vector2f& getPosition () const { return player.getPosition(); }
+  inline const sf::CircleShape getPlayer () const { return player; };
+  inline std::vector <Bullet*> getBullets () { return bullet; }
 private:
   sf::CircleShape player;
-  void hundleCollision (); // Aun no estoy seguro de los parametros
-  float movementSpeed;
-  int dirX;
-  int dirY;
-  int attack;
-  float attackSpeed;
-  int kindOfBullet;
-  int lives;
-  int score;
+  std::vector <Bullet*> bullet;
+  std::vector <bool> toDelete;
+  int dirX, dirY;
 };
 
 #endif

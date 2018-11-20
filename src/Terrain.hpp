@@ -16,7 +16,6 @@ public:
 private:
   std::mt19937 rng; 
   std::vector <sf::CircleShape> starts;
-  // Por ahora mejor no nos preocupemos en dibujar la tierra, asteroides, etc
 };
 
 #endif

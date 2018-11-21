@@ -1,6 +1,12 @@
 #include "Game.hpp"
 #include <iostream>
+<<<<<<< Updated upstream
 
+=======
+#include <chrono>
+#include <thread>
+#include "Menu.hpp"
+>>>>>>> Stashed changes
 Game::Game ():
   window(sf::VideoMode(WIDTH, HEIGHT), "Gradius - NES"),
   player1(),
@@ -13,7 +19,9 @@ Game::~Game () {
 }
 
 void Game::run () {
+  Menu menu(window.getSize().x, window.getSize().y);
   while (window.isOpen()) {
+<<<<<<< Updated upstream
     /* Preguntar las opciones con las que quiere jugar
     while (window.isOpen() and not playing) {
       showSetup();
@@ -33,6 +41,30 @@ void Game::run () {
     }
     */
   }
+=======
+    std::cout<<"aqui imprime"<< "\n"; 
+     menu.draw(window);
+
+  //   showCounter();
+  //   while (window.isOpen()) {
+  //     gotEvents = window.pollEvent(event);
+  //     processPlayingEvents();
+  //     processWindowEvents();
+  //     bool gotPaused = pause;
+  //     while (window.isOpen() and pause) {
+  //       if (gotPaused) showPausedMessage();
+  //       gotEvents = window.pollEvent(event);
+  //       processWindowEvents();
+  //     }
+  //     if (gotPaused) showCounter();
+  //     update();
+  //     render();
+  //     if (state != State::PLAYING) break;
+  //   }
+  //   std::this_thread::sleep_for(std::chrono::milliseconds(COUNTER::LAPSE));
+  //   reset();
+   }
+>>>>>>> Stashed changes
 }
 
 void Game::showSetup () {

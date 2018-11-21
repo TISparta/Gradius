@@ -6,9 +6,14 @@
 
 Game::Game ():
   window(sf::VideoMode(WIDTH, HEIGHT), GAME_NAME),
-  player(),
   terrain() {
+  pause = false;
+  gotEvents = false;
+  cntEnemy01 = 0;
   load(font, FONT_PATH); 
+  load(textureSpaceship, SPACESHIP_PATH);
+  load(textureEnemy01, ENEMY01_PATH);
+  player = Player(textureSpaceship);
 }
 
 Game::~Game () {
@@ -17,12 +22,6 @@ Game::~Game () {
 
 void Game::run () {
   while (window.isOpen()) {
-    /* Preguntar las opciones con las que quiere jugar
-    while (window.isOpen() and not playing) {
-      showSetup();
-      processSetupEvents();
-    }
-    */
     showCounter();
     while (window.isOpen()) {
       gotEvents = window.pollEvent(event);
@@ -39,14 +38,18 @@ void Game::run () {
       render();
       if (state != State::PLAYING) break;
     }
-    window.close();
-    /* Mostrar su score y preguntar si quiere jugar de nuev
-    while (window.isOpen()) {
-      showResult();
-      processResultEvents();
-    }
-    */
+    std::this_thread::sleep_for(std::chrono::milliseconds(COUNTER::LAPSE));
+    reset();
   }
+}
+
+void Game::reset () {
+  player = Player(textureSpaceship);
+  enemy.clear();
+  state = State::PLAYING;
+  pause = false;
+  gotEvents = false;
+  cntEnemy01 = 0;
 }
 
 void Game::showCounter () {
@@ -98,14 +101,14 @@ void Game::showPausedMessage () {
   sf::Text text;
   setText(text, PAUSE::MSG, PAUSE::TEXT_SIZE, font);
   terrain.update();
-  render(true);
+  render(false);
   window.draw(text);
   window.display();
 }
 
 void Game::update () {
   if (cntEnemy01 <= 0) {
-    enemy.emplace_back(new Enemy01());
+    enemy.emplace_back(new Enemy01(textureEnemy01));
     cntEnemy01 = E01::cnt;
   }
   terrain.update();
@@ -115,13 +118,13 @@ void Game::update () {
   hundleCollisions();
 }
 
-
 void Game::hundleCollisions () {
-  hundleCollisionWithEnemy();
-  hundleCollisionWithBullets();
+  hundleCollisionWithEnemies();
+  hundleCollisionWithPlayerBullets();
+  hundleCollisionWithEnemyBullets();
 }
 
-void Game::hundleCollisionWithEnemy () {
+void Game::hundleCollisionWithEnemies () {
   auto p = player.getPlayer();
   bool collision = false;
   for_each(all(enemy), [&] (auto enemy_i) {
@@ -133,7 +136,7 @@ void Game::hundleCollisionWithEnemy () {
   if (collision) state = State::LOSE;
 }
 
-void Game::hundleCollisionWithBullets () {
+void Game::hundleCollisionWithPlayerBullets () {
   auto bullets = player.getBullets(); 
   for_each(all(enemy), [&] (auto enemy_i) {
     auto _enemy = enemy_i -> getEnemies();
@@ -150,10 +153,24 @@ void Game::hundleCollisionWithBullets () {
   });
 }
 
-void Game::render (bool pause) {
+void Game::hundleCollisionWithEnemyBullets () {
+  auto p = player.getPlayer();
+  for_each(all(enemy), [&] (auto enemy_i) {
+    auto b = enemy_i -> getBullets();
+    for (int i = 0; i < int(b.size()); i++) {
+      auto s1 = p.getGlobalBounds();
+      auto s2 = b[i] -> getBullet().getGlobalBounds();
+      if (s1.intersects(s2)) {
+        state = State::LOSE;
+      }
+    }
+  });
+}
+
+void Game::render (bool display) {
   window.clear();
   terrain.render(window);
   for (auto enemy_i: enemy) enemy_i -> render(window);
   player.render(window);
-  if (not pause) window.display();
+  if (display) window.display();
 }

@@ -9,8 +9,10 @@
 // TITLES
 static std::string GAME_NAME = "Gradius - NES";
 
-// Font
+// Resources paths
 static std::string FONT_PATH = "./fonts/arial.ttf";
+static std::string SPACESHIP_PATH = "./images/spaceship1.png";
+static std::string ENEMY01_PATH = "./images/enemy01.png";
 
 // Counter
 namespace COUNTER {
@@ -66,6 +68,7 @@ static std::vector <int> dy = {-1, 0, 1, 0};
 
 // Player
 namespace PLAYER {
+  static float RADIUS = 40.f;
   static sf::Vector2f position = {100.f, 100.f};
   static float movementSpeedX = WIDTH * 0.015F / FRAMES;
   static float movementSpeedY = WIDTH * 0.015F / FRAMES;
@@ -74,7 +77,7 @@ namespace PLAYER {
 // Enemy 01
 namespace E01 {
   static float movementSpeed = WIDTH * 0.015f / FRAMES;
-  static float radius = 15.f;
+  static float radius = 30.f;
   static sf::Color color = sf::Color::Green;
   static double d = E01::radius * 2.5f;
   static double x = WIDTH;
@@ -103,7 +106,7 @@ namespace Start {
 namespace BulletConf {
   static sf::Vector2f dimensions(30.f, 10.f);
   static sf::Color color = sf::Color::Yellow;
-  static float dx = 0.2f;
+  static float dx = 0.3f;
 }
 
 #endif

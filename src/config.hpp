@@ -62,7 +62,7 @@ namespace KEY {
   static int SPACE = sf::Keyboard::Space;
   static int EXIT = sf::Keyboard::Escape;
   static int PAUSE = sf::Keyboard::P;
-  static int ENTER = sf::Keyboard::Enter;
+  static int ENTER = sf::Keyboard::Return;
 }
 
 // States

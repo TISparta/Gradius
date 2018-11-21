@@ -36,6 +36,7 @@ private:
   std::vector <Enemy*> enemy;
   sf::Event event;
   sf::Font font;
+  sf::Texture spaceship;
 };
 
 #endif

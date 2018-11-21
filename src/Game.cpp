@@ -8,7 +8,7 @@ Game::Game ():
   window(sf::VideoMode(WIDTH, HEIGHT), GAME_NAME),
   player(),
   terrain() {
-  loadFont(font, FONT); 
+  load(font, FONT_PATH); 
 }
 
 Game::~Game () {

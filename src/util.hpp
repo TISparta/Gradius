@@ -5,9 +5,10 @@
 #include <stdexcept>
 #include <string>
 
-void loadFont (sf::Font& font, std::string fontName) {
-  if (not font.loadFromFile("./fonts/" + fontName)) {
-    throw std::runtime_error("Could not load " + fontName + "\n");
+template <class T>
+void load (T& target, std::string path) {
+  if (not target.loadFromFile(path)) {
+    throw std::runtime_error("Could not load " + path + "\n");
   }
 }
 

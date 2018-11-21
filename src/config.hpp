@@ -10,7 +10,7 @@
 static std::string GAME_NAME = "Gradius - NES";
 
 // Font
-static std::string FONT = "arial.ttf";
+static std::string FONT_PATH = "./fonts/arial.ttf";
 
 // Counter
 namespace COUNTER {

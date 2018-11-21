@@ -14,9 +14,11 @@ public:
   virtual void setToDelete (int id) override;
   virtual std::vector <sf::CircleShape>& getEnemies () override { return enemy; }
 private:
+  void updateEnemies (const sf::Vector2f player_pos);
+  void updateBullets ();
   int prevDirectionY;
-  float x, y;
-  clock_t start;
+  clock_t start1, start2;
+  std::vector <bool> toDeleteEnemy, toDeleteBullet;
   std::vector <sf::CircleShape> enemy;
 };
 

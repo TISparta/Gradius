@@ -103,7 +103,7 @@ namespace Start {
 namespace BulletConf {
   static sf::Vector2f dimensions(30.f, 10.f);
   static sf::Color color = sf::Color::Yellow;
-  static float dx = 0.2f;
+  static float dx = 0.3f;
 }
 
 #endif

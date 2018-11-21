@@ -18,6 +18,8 @@ public:
   inline const sf::CircleShape getPlayer () const { return player; };
   inline std::vector <Bullet*> getBullets () { return bullet; }
 private:
+  void updatePlayer ();
+  void updateBullets ();
   sf::CircleShape player;
   std::vector <Bullet*> bullet;
   std::vector <bool> toDelete;

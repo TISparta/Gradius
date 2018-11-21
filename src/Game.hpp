@@ -16,16 +16,17 @@ public:
   ~Game ();
   void run ();
 private:
+  void reset ();
   void showCounter ();
   void processPlayingEvents ();
   void processWindowEvents ();
   void showPausedMessage ();
   void update ();
   void hundleCollisions ();
-  void hundleCollisionWithEnemy ();
-  void hundleCollisionWithBullets ();
-  void render (bool pause = false);
-
+  void hundleCollisionWithEnemies ();
+  void hundleCollisionWithPlayerBullets ();
+  void hundleCollisionWithEnemyBullets ();
+  void render (bool display = true);
   State state = State::PLAYING; 
   bool pause = false;
   bool gotEvents = false;

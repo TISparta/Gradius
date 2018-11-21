@@ -1,6 +1,7 @@
 #include "Enemy01.hpp"
 
 Enemy01::Enemy01(sf::Texture* texture, sf::Texture* _textureBullet): Enemy() {
+  score = E01::score;
   toDeleteEnemy.resize(E01::nEnemies, false);
   directionX = DIR::LEFT;
   directionY = prevDirectionY = DIR::UP;

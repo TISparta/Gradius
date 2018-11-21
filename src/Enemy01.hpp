@@ -13,6 +13,7 @@ public:
   virtual void update (const sf::Vector2f player_pos) override;
   virtual void setToDelete (int id) override;
   virtual std::vector <sf::CircleShape>& getEnemies () override { return enemy; }
+  virtual int getScore () const { return score; };
 private:
   void updateEnemies (const sf::Vector2f player_pos);
   void updateBullets ();

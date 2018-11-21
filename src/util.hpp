@@ -2,6 +2,7 @@
 #define CONFIG_CPP
 
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include <stdexcept>
 #include <string>
 
@@ -12,6 +13,13 @@ static void load (T*& target, std::string path) {
     throw std::runtime_error("Could not load " + path + "\n");
   }
 }
+
+static void loadM (sf::Music& target, std::string path) {
+  if (not target.openFromFile(path)) {
+    throw std::runtime_error("Could not load " + path + "\n");
+  }
+}
+
 
 static void setText (sf::Text& text, std::string msg, int size, const sf::Font* font, sf::Vector2f pos = {0, 0}) {
   text.setFont(*font);

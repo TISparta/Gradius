@@ -2,13 +2,15 @@
 #define GAME_HPP
 
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include "config.hpp"
 #include "Player.hpp"
 #include "Terrain.hpp"
 #include "Enemy.hpp"
 #include "Enemy01.hpp"
 #include "Bullet.hpp"
-#include "Menu.hpp"
+#include "Intro.hpp"
+#include "Exit.hpp"
 
 class Game {
 public:
@@ -20,7 +22,8 @@ private:
   void showCounter ();
   void processPlayingEvents ();
   void processWindowEvents ();
-  void processMenuEvents ();
+  void processIntroEvents ();
+  void processExitEvents ();
   void showPausedMessage ();
   void update ();
   void hundleCollisions ();
@@ -28,11 +31,13 @@ private:
   void hundleCollisionWithPlayerBullets ();
   void hundleCollisionWithEnemyBullets ();
   void render (bool display = true);
-  Menu menu;
+  Intro intro;
+  Exit exit;
   State state = State::PLAYING; 
-  bool pause = false;
-  bool gotEvents = false;
-  int cntEnemy01 = 0;
+  bool pause;
+  bool gotEvents;
+  int cntEnemy01;
+  int score;
   sf::RenderWindow window;
   Player player;
   Terrain terrain;
@@ -44,6 +49,7 @@ private:
   sf::Texture* textureLogo;
   sf::Texture* textureBullet1;
   sf::Texture* textureBullet2;
+  sf::Music backgroundMusic;
 };
 
 #endif

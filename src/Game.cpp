@@ -10,13 +10,16 @@ Game::Game ():
   pause = false;
   gotEvents = false;
   cntEnemy01 = 0;
+  score = 0;
   load(font, FONT_PATH); 
   load(textureSpaceship, SPACESHIP_PATH);
   load(textureEnemy01, ENEMY01_PATH);
   load(textureLogo, LOGO_PATH);
   load(textureBullet1, BULLET1_PATH);
   load(textureBullet2, BULLET2_PATH);
+  loadM(backgroundMusic, BACKGROUND_MUSIC_PATH);
   player = Player(textureSpaceship, textureBullet2);
+  backgroundMusic.play();
 }
 
 Game::~Game () {
@@ -25,17 +28,17 @@ Game::~Game () {
 
 void Game::run () {
   while (window.isOpen()) {
-    menu = Menu(font, textureSpaceship, textureLogo);
-    state = State::MENU;
-    // Menu
-    while (window.isOpen() and state == State::MENU) {
+    intro = Intro(font, textureSpaceship, textureLogo);
+    state = State::INTRO;
+    // Intro
+    while (window.isOpen() and state == State::INTRO) {
       gotEvents = window.pollEvent(event);
       processWindowEvents();
-      processMenuEvents();
+      processIntroEvents();
       terrain.update();
       window.clear();
       terrain.render(window);
-      menu.render(window);
+      intro.render(window);
       window.display();
     }
     showCounter();
@@ -57,6 +60,19 @@ void Game::run () {
       if (state != State::PLAYING) break;
     }
     std::this_thread::sleep_for(std::chrono::milliseconds(COUNTER::LAPSE));
+    exit = Exit(font, textureSpaceship);
+    state = State::EXIT;
+    // Exit
+    while (window.isOpen() and state == State::EXIT) {
+      gotEvents = window.pollEvent(event);
+      processWindowEvents();
+      processExitEvents();
+      terrain.update();
+      window.clear();
+      terrain.render(window);
+      exit.render(window);
+      window.display();
+    }
     reset();
   }
 }
@@ -68,6 +84,7 @@ void Game::reset () {
   pause = false;
   gotEvents = false;
   cntEnemy01 = 0;
+  score = 0;
 }
 
 void Game::showCounter () {
@@ -115,16 +132,32 @@ void Game::processWindowEvents () {
   }
 }
 
-void Game::processMenuEvents () {
+void Game::processIntroEvents () {
   if (not gotEvents) return;
   if (event.type == sf::Event::KeyPressed) {
     int key = event.key.code;
-    if (find(all(KEY::UP), key) != end(KEY::UP)) menu.move(-1);
-    if (find(all(KEY::DOWN), key) != end(KEY::DOWN)) menu.move(1);
+    if (find(all(KEY::UP), key) != end(KEY::UP)) intro.move(-1);
+    if (find(all(KEY::DOWN), key) != end(KEY::DOWN)) intro.move(1);
     if (key == KEY::ENTER or key == KEY::SPACE) {
-      int id = menu.getId();
-      if (id == MenuConf::EXIT) window.close();
-      if (id == MenuConf::PLAY) state = State::PLAYING;
+      int id = intro.getId();
+      if (id == IntroConf::EXIT) window.close();
+      if (id == IntroConf::PLAY) state = State::PLAYING;
+    }
+  }
+}
+
+// No unimos esta funcion y la anterior porque creemos que ambas
+// pueden llegar a crecer bastante por si mismas
+void Game::processExitEvents () {
+  if (not gotEvents) return;
+  if (event.type == sf::Event::KeyPressed) {
+    int key = event.key.code;
+    if (find(all(KEY::UP), key) != end(KEY::UP)) exit.move(-1);
+    if (find(all(KEY::DOWN), key) != end(KEY::DOWN)) exit.move(1);
+    if (key == KEY::ENTER or key == KEY::SPACE) {
+      int id = exit.getId();
+      if (id == ExitConf::EXIT) window.close();
+      if (id == ExitConf::AGAIN) state = State::PLAYING;
     }
   }
 }
@@ -179,6 +212,7 @@ void Game::hundleCollisionWithPlayerBullets () {
         if (s1.intersects(s2)) {
           enemy_i -> setToDelete(i);
           player.setToDeleteBullet(j);
+          score += enemy_i -> getScore();
         }
       }
     } 
@@ -204,5 +238,8 @@ void Game::render (bool display) {
   terrain.render(window);
   for (auto enemy_i: enemy) enemy_i -> render(window);
   player.render(window);
+  sf::Text text;
+  setText(text, std::to_string(score), SCORE::TEXT_SIZE, font, SCORE::POS);
+  window.draw(text);
   if (display) window.display();
 }

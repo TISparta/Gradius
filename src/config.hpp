@@ -20,9 +20,10 @@ static std::string ENEMY01_PATH = "./images/enemy01.png";
 static std::string LOGO_PATH = "./images/logo.png";
 static std::string BULLET1_PATH = "./images/bullet1.png";
 static std::string BULLET2_PATH = "./images/bullet2.png";
+static std::string BACKGROUND_MUSIC_PATH = "./sound/background-music.wav";
 
-// Menu
-namespace MenuConf {
+// Intro
+namespace IntroConf {
   static int PLAY = 0;
   static int EXIT = 1;
   static int TEXT_SIZE = 80;
@@ -39,6 +40,23 @@ namespace MenuConf {
   static sf::Vector2f LOGO_POS(2 * WIDTH / 7.f, 100.f);
 }
 
+// Exit
+namespace ExitConf {
+  static int AGAIN = 0;
+  static int EXIT = 1;
+  static int TEXT_SIZE = 80;
+  static int PADDING = 10;
+  static std::string OPTION1 = "AGAIN";
+  static sf::Vector2f POS1(WIDTH / 2.f, HEIGHT / 2.f);
+  static std::string OPTION2 = "EXIT";
+  static sf::Vector2f POS2(WIDTH / 2.f, HEIGHT / 2.f + TEXT_SIZE + PADDING);
+  static float RADIUS = TEXT_SIZE / 2.f;
+  static std::vector <sf::Vector2f> SPACESHIP_POS = {
+    {WIDTH / 2.f - 3 * RADIUS, HEIGHT / 2.f},
+    {WIDTH / 2.f - 3 * RADIUS, HEIGHT / 2.f + TEXT_SIZE + PADDING}};
+}
+
+
 // Counter
 namespace COUNTER {
   static std::vector <std::string> MSG = {"1", "2", "3", "GO"};
@@ -50,6 +68,12 @@ namespace COUNTER {
 namespace PAUSE {
   static std::string MSG = "PAUSA";
   static int TEXT_SIZE = 50;
+}
+
+// Score
+namespace SCORE {
+  static int TEXT_SIZE = 40;
+  static sf::Vector2f POS(0, HEIGHT - TEXT_SIZE);
 }
 
 // KEYS
@@ -69,7 +93,8 @@ namespace KEY {
 enum class State {
   LOSE,
   PLAYING,
-  MENU
+  INTRO,
+  EXIT
 };
 
 // Directions
@@ -99,6 +124,7 @@ namespace PLAYER {
 
 // Enemy 01
 namespace E01 {
+  static int score = 50;
   static float movementSpeed = WIDTH * 0.015f / FRAMES;
   static float radius = 30.f;
   static sf::Color color = sf::Color::Green;

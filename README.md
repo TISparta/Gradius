@@ -2,18 +2,16 @@
 
 #### Proyecto de POOII
 
+El proyecto fue probado en Ubuntu 18.04.1 LTS
+
 **Prerequisitos**
 - [SFML](https://www.sfml-dev.org/)
 
-**¿Cómo ejecutar el programa?**
-- Clona el repositorio
-- Abre una terminal y ubicate donde lo clonaste
-- Crea el ejecutable con
+**Ejecución**
 ```
+git clone https://github.com/TISparta/Gradius.git
+cd Gradius
 bash run
-```
-- Ejecuta el programa con
-```
 ./Gradius.out
 ```
 

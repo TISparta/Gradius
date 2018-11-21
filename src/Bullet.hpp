@@ -10,6 +10,11 @@ public:
   ~Bullet() {};
   void render (sf::RenderWindow& window);
   void update ();
+<<<<<<< HEAD
+=======
+  inline sf::RectangleShape getBullet () { return bullet; }
+  inline sf::Vector2f getPosition () const { return bullet.getPosition(); }
+>>>>>>> master
 private:
   int dir;
   sf::RectangleShape bullet;

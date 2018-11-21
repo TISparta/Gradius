@@ -16,7 +16,10 @@ public:
 private:
   std::mt19937 rng; 
   std::vector <sf::CircleShape> starts;
+<<<<<<< HEAD:src/Terrain.hpp
   // Por ahora mejor no nos preocupemos en dibujar la tierra, asteroides, etc
+=======
+>>>>>>> master:src/Terrain.hpp
 };
 
 #endif

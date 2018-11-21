@@ -18,7 +18,7 @@ sudo apt-get install libsfml-dev
 ```
 git clone https://github.com/TISparta/Gradius.git
 cd Gradius
-bash run
+bash run.sh
 ./Gradius.out
 ```
 

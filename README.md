@@ -1,6 +1,6 @@
 # Gradius - NES
 
-#### Proyecto de POOIII
+#### Proyecto de POOII
 
 - [UML](https://github.com/TISparta/Gradius/blob/master/uml_final.jpg)
 

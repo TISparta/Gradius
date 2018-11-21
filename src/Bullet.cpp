@@ -1,11 +1,11 @@
 #include "Bullet.hpp"
 #include <iostream>
 
-Bullet::Bullet (sf::Vector2f pos, int dir):
+Bullet::Bullet (sf::Vector2f pos, int dir, sf::Texture* texture):
   dir(dir),
   bullet(BulletConf::dimensions) {
   bullet.setPosition(pos);
-  bullet.setFillColor(BulletConf::color);
+  bullet.setTexture(texture);
 }
 
 void Bullet::render (sf::RenderWindow& window) {

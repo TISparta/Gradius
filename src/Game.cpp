@@ -13,7 +13,10 @@ Game::Game ():
   load(font, FONT_PATH); 
   load(textureSpaceship, SPACESHIP_PATH);
   load(textureEnemy01, ENEMY01_PATH);
-  player = Player(textureSpaceship);
+  load(textureLogo, LOGO_PATH);
+  load(textureBullet1, BULLET1_PATH);
+  load(textureBullet2, BULLET2_PATH);
+  player = Player(textureSpaceship, textureBullet2);
 }
 
 Game::~Game () {
@@ -22,7 +25,22 @@ Game::~Game () {
 
 void Game::run () {
   while (window.isOpen()) {
+    menu = Menu(font, textureSpaceship, textureLogo);
+    state = State::MENU;
+    // Menu
+    while (window.isOpen() and state == State::MENU) {
+      gotEvents = window.pollEvent(event);
+      processWindowEvents();
+      processMenuEvents();
+      terrain.update();
+      window.clear();
+      terrain.render(window);
+      menu.render(window);
+      window.display();
+    }
     showCounter();
+    pause = false;
+    // Game
     while (window.isOpen()) {
       gotEvents = window.pollEvent(event);
       processPlayingEvents();
@@ -44,7 +62,7 @@ void Game::run () {
 }
 
 void Game::reset () {
-  player = Player(textureSpaceship);
+  player = Player(textureSpaceship, textureBullet2);
   enemy.clear();
   state = State::PLAYING;
   pause = false;
@@ -97,6 +115,20 @@ void Game::processWindowEvents () {
   }
 }
 
+void Game::processMenuEvents () {
+  if (not gotEvents) return;
+  if (event.type == sf::Event::KeyPressed) {
+    int key = event.key.code;
+    if (find(all(KEY::UP), key) != end(KEY::UP)) menu.move(-1);
+    if (find(all(KEY::DOWN), key) != end(KEY::DOWN)) menu.move(1);
+    if (key == KEY::ENTER or key == KEY::SPACE) {
+      int id = menu.getId();
+      if (id == MenuConf::EXIT) window.close();
+      if (id == MenuConf::PLAY) state = State::PLAYING;
+    }
+  }
+}
+
 void Game::showPausedMessage () {
   sf::Text text;
   setText(text, PAUSE::MSG, PAUSE::TEXT_SIZE, font);
@@ -108,7 +140,7 @@ void Game::showPausedMessage () {
 
 void Game::update () {
   if (cntEnemy01 <= 0) {
-    enemy.emplace_back(new Enemy01(textureEnemy01));
+    enemy.emplace_back(new Enemy01(textureEnemy01, textureBullet1));
     cntEnemy01 = E01::cnt;
   }
   terrain.update();

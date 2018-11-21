@@ -8,7 +8,7 @@
 class Player {
 public:
   Player () {};
-  Player (sf::Texture* texture);
+  Player (sf::Texture* textureSpaceship, sf::Texture* _textureBullet);
   ~Player ();
   void render (sf::RenderWindow& window);
   void update ();
@@ -25,6 +25,7 @@ private:
   std::vector <Bullet*> bullet;
   std::vector <bool> toDelete;
   int dirX, dirY;
+  sf::Texture* textureBullet;
 };
 
 #endif

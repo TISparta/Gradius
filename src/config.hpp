@@ -9,10 +9,35 @@
 // TITLES
 static std::string GAME_NAME = "Gradius - NES";
 
+// Window size
+static int WIDTH = 1200;
+static int HEIGHT = 600;
+
 // Resources paths
 static std::string FONT_PATH = "./fonts/arial.ttf";
 static std::string SPACESHIP_PATH = "./images/spaceship1.png";
 static std::string ENEMY01_PATH = "./images/enemy01.png";
+static std::string LOGO_PATH = "./images/logo.png";
+static std::string BULLET1_PATH = "./images/bullet1.png";
+static std::string BULLET2_PATH = "./images/bullet2.png";
+
+// Menu
+namespace MenuConf {
+  static int PLAY = 0;
+  static int EXIT = 1;
+  static int TEXT_SIZE = 80;
+  static int PADDING = 10;
+  static std::string OPTION1 = "PLAY";
+  static sf::Vector2f POS1(WIDTH / 2.f, HEIGHT / 2.f);
+  static std::string OPTION2 = "EXIT";
+  static sf::Vector2f POS2(WIDTH / 2.f, HEIGHT / 2.f + TEXT_SIZE + PADDING);
+  static float RADIUS = TEXT_SIZE / 2.f;
+  static std::vector <sf::Vector2f> SPACESHIP_POS = {
+    {WIDTH / 2.f - 3 * RADIUS, HEIGHT / 2.f},
+    {WIDTH / 2.f - 3 * RADIUS, HEIGHT / 2.f + TEXT_SIZE + PADDING}};
+  static sf::Vector2f LOGO_SIZE(600.f, 130.f);
+  static sf::Vector2f LOGO_POS(2 * WIDTH / 7.f, 100.f);
+}
 
 // Counter
 namespace COUNTER {
@@ -34,15 +59,17 @@ namespace KEY {
   static std::vector <int> LEFT = {sf::Keyboard::Left, sf::Keyboard::D};
   static std::vector <int> RIGHT = {sf::Keyboard::Right, sf::Keyboard::A};
   static std::vector <int> ATTACK = {sf::Keyboard::Space};
+  static int SPACE = sf::Keyboard::Space;
   static int EXIT = sf::Keyboard::Escape;
   static int PAUSE = sf::Keyboard::P;
+  static int ENTER = sf::Keyboard::Enter;
 }
 
 // States
 enum class State {
-  WIN,
   LOSE,
-  PLAYING
+  PLAYING,
+  MENU
 };
 
 // Directions
@@ -54,10 +81,6 @@ namespace DIR {
   static int DOWN = 2;
   static int RIGHT = 3;
 }
-
-// Window size
-static int WIDTH = 1200;
-static int HEIGHT = 600;
 
 // Frames per second
 static int FRAMES = 60;
@@ -104,7 +127,7 @@ namespace Start {
 
 // Bullet
 namespace BulletConf {
-  static sf::Vector2f dimensions(30.f, 10.f);
+  static sf::Vector2f dimensions(35.f, 15.f);
   static sf::Color color = sf::Color::Yellow;
   static float dx = 0.3f;
 }

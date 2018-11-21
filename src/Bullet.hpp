@@ -6,9 +6,9 @@
 
 class Bullet {
 public:
-  Bullet(sf::Vector2f pos, int dir);
+  Bullet(sf::Vector2f pos, int dir, sf::Texture* texture);
   ~Bullet() {};
-  void render (sf::RenderWindow& window);
+  void render (sf::RenderWindow& windowi);
   void update ();
   inline sf::RectangleShape getBullet () { return bullet; }
   inline sf::Vector2f getPosition () const { return bullet.getPosition(); }

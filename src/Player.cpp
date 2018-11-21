@@ -1,9 +1,10 @@
 #include "Player.hpp"
 
-Player::Player (sf::Texture* texture) {
+Player::Player (sf::Texture* textureSpaceship, sf::Texture* _textureBullet) {
   player.setRadius(PLAYER::RADIUS);
   player.setPosition(PLAYER::position);
-  player.setTexture(texture);
+  player.setTexture(textureSpaceship);
+  textureBullet = _textureBullet;
   dirY = DIR::NOMOVE;
   dirX = DIR::RIGHT;
 }
@@ -68,7 +69,7 @@ void Player::shoot () {
   sf::Vector2f pos = player.getPosition();
   pos.x += 2 * PLAYER::RADIUS;
   pos.y += PLAYER::RADIUS;
-  bullet.emplace_back(new Bullet(pos, DIR::RIGHT));
+  bullet.emplace_back(new Bullet(pos, DIR::RIGHT, textureBullet));
   toDelete.push_back(false);
 }
 

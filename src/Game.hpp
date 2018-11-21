@@ -8,7 +8,7 @@
 #include "Enemy.hpp"
 #include "Enemy01.hpp"
 #include "Bullet.hpp"
-#include <vector>
+#include "Menu.hpp"
 
 class Game {
 public:
@@ -20,6 +20,7 @@ private:
   void showCounter ();
   void processPlayingEvents ();
   void processWindowEvents ();
+  void processMenuEvents ();
   void showPausedMessage ();
   void update ();
   void hundleCollisions ();
@@ -27,6 +28,7 @@ private:
   void hundleCollisionWithPlayerBullets ();
   void hundleCollisionWithEnemyBullets ();
   void render (bool display = true);
+  Menu menu;
   State state = State::PLAYING; 
   bool pause = false;
   bool gotEvents = false;
@@ -39,6 +41,9 @@ private:
   sf::Font* font;
   sf::Texture* textureSpaceship;
   sf::Texture* textureEnemy01;
+  sf::Texture* textureLogo;
+  sf::Texture* textureBullet1;
+  sf::Texture* textureBullet2;
 };
 
 #endif

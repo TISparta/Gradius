@@ -1,6 +1,6 @@
 #include "Enemy01.hpp"
 
-Enemy01::Enemy01(sf::Texture* texture): Enemy() {
+Enemy01::Enemy01(sf::Texture* texture, sf::Texture* _textureBullet): Enemy() {
   toDeleteEnemy.resize(E01::nEnemies, false);
   directionX = DIR::LEFT;
   directionY = prevDirectionY = DIR::UP;
@@ -14,6 +14,7 @@ Enemy01::Enemy01(sf::Texture* texture): Enemy() {
     enemy.push_back(enemy_i);
   });
   start1 = start2 = clock();
+  textureBullet = _textureBullet;
 }
 
 void Enemy01::render (sf::RenderWindow& window) {
@@ -78,7 +79,7 @@ void Enemy01::updateBullets () {
   });
   if (not enemy.empty() and 1.0 * (clock() - start2) / CLOCKS_PER_SEC > E01::frec) {
     int id = rand() % enemy.size();
-    bullet.emplace_back(new Bullet(enemy[id].getPosition(), DIR::LEFT));
+    bullet.emplace_back(new Bullet(enemy[id].getPosition(), DIR::LEFT, textureBullet));
     toDeleteBullet.push_back(false);
     start2 = clock();
   }
